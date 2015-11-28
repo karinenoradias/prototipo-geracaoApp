@@ -1,0 +1,25 @@
+#area{ 
+	margin-top:52px;
+	border:1px solid #CFCFCF;
+	height: 600px; }
+#menu-lateral{
+				margin-top: 52px;
+				border: 1px solid #CFCFCF;
+				
+    		}
+
+#topo-menu-lateral{
+				text-align: center;
+				background-color:#BCD2EE;
+					}
+
+.menu-lateral-formas{
+				text-align: center;
+				padding: 6px;
+				width: 94.5px;
+    			height: 70px;
+				
+				}
+
+.b-oval{background-image:url("../img/oval.png");}
+
