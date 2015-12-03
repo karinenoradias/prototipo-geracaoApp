@@ -21,5 +21,35 @@
 				
 				}
 
-.b-oval{background-image:url("../img/oval.png");}
+#draggable { width: 150px; height: 150px; padding: 0.5em; }
+
+ #containment-wrapper { width: 95%; height:150px; border:2px solid #ccc; padding: 10px; }
+  h3 { clear: left; }
+
+  
+#losango{
+  width:100px;
+  height:100px;
+  background:#ccc;
+  margin-top:50px;
+  margin-left:50px;
+   /* Rotação */  
+   transform: rotate(-45deg);  
+}
+
+#circulo{ 
+  background: #666;
+  border-radius:100%;
+  width:150px;
+  height:150px;
+}
+
+#oval{ 
+  background: #666;
+  border-radius:100%;
+  width:230px;
+  height:100px;
+}
+
+
 
