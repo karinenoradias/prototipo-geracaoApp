@@ -8,6 +8,13 @@
 				
     		}
 
+#menu-opcoes{
+        margin-top: 30px;
+        border: 1px solid #CFCFCF;
+        height: 300px;
+        display:block;
+        }
+
 #topo-menu-lateral{
 				text-align: center;
 				background-color:#BCD2EE;
@@ -26,8 +33,10 @@
  #containment-wrapper { width: 95%; height:150px; border:2px solid #ccc; padding: 10px; }
   h3 { clear: left; }
 
+
+.retangulo { width: 150px; height: 150px; padding: 0.5em; }
   
-#losango{
+.losango{
   width:100px;
   height:100px;
   background:#ccc;
@@ -37,19 +46,21 @@
    transform: rotate(-45deg);  
 }
 
-#circulo{ 
+.circulo{ 
   background: #666;
   border-radius:100%;
   width:150px;
   height:150px;
 }
 
-#oval{ 
+.oval{ 
   background: #666;
   border-radius:100%;
   width:230px;
   height:100px;
 }
+
+
 
 
 
