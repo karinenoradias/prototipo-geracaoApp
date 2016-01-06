@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Papp + </a>
+          <a class="brand" href="#"> Protótipo v1 </a>
           <div class="nav-collapse collapse">
            
           </div><!--/.nav-collapse -->
@@ -37,10 +37,34 @@
 
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div id="area" class="span10 table-bordered" ondrop = "return dragDrop(event)" ondragover = "return dragOver(event)">
 
+			
+
+
+			<div id="principal" class="span10">
+			<div id="area"  onClick='selecionar(area)'>
+
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab1" data-toggle="tab"> Fluxograma </a></li>
+					<li ><a href="#tab2" data-toggle="tab">  Visualizar Tela </a> </li>
+					
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active "id="tab1">
+						
+					</div>
+					<div class="tab-pane" id="tab2">
+						
+					</div>
+					
+				</div>
 				
 			</div>
+
+			
+			</div>
+
+
 
 			<div id="menu-lateral" class="span2 table-bordered"  data-spy="affix" data-offset-top="311">
 
@@ -102,15 +126,15 @@
 			<div class="row-fluid">
 
 					<div  class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
-						<input id="delete" type="image" src="img/delete.png" width="35px" height="35px">
+						<input id="delete" type="image" src="img/delete.png" width="25px" height="25px">
 					</div>
 
 					<div  class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
-						<input id="delete" type="image" src="img/delete.png" width="35px" height="35px">
+						<input id="edit" type="image" src="img/editar.png" width="35px" height="35px">
 					</div>
 
 					<div class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
-							<input id="redimensiona" type="image" src="img/redimensiona.png" width="35px" height="35px">
+							<input id="redimensiona" type="image" src="img/redimensiona.png" width="20px" height="20px">
 					</div>
 
 			</div>
@@ -170,34 +194,20 @@
 		var losango = $('#bLosang');
 		var apagar = $('#delete');
 		var redimensiona = $('#redimensiona');
+		var editar = $('#edit');
 
-		var classeElementos = $('.ui-widget-content');
+
+		
 
 		var count = 0;
 		var id = 0;
 
-		 //if(id != 'area'){
-        //$("#menu-opcoes").css("display", "block");}
-        //else{ $("#menu-opcoes").css("display", "none");}
-
-        //var n = id.indexOf("id");
+		var allInputs = $( ":text" );
 
 
-
-        /*if(id.contains("id")) {
-          $("#menu-opcoes").css("display", "block");
-		}*/
-
-		//if(n >= 0) { alert(success); }
-
-		classeElementos.click(function() {
-
-			if(id != 'area'){
-        		$("#menu-opcoes").css("display", "block");}
-        	else{ $("#menu-opcoes").css("display", "none");}
-
-		});
-
+	
+		
+		
 		redimensiona.click(function() {
 
 			$('#'+id).resizable();
@@ -206,6 +216,31 @@
 		apagar.click(function() {
 
 			$('#'+id).remove();
+			$("#menu-opcoes").css("display", "none");
+
+
+			 $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'delete', projeto:'1', idElemento: id , tipo:'0'}
+				}).done(function(e){
+						//$('div.comments').append(e); 
+						//alert(e);
+
+						});
+
+
+		});
+
+		editar.click(function() { 
+			var $input = $("<div class='conteudoElemento' ><input type='text'></div>");
+			$('#'+id).append($input);
+
+			allInputs.attr("disabled", false);
+
+			//var valor = $("input[name=<nome do campo aqui>]").val();
+			//var $input = $("<div id='conteudoElemento'> <form><input type='text'></form></div>");
+
 		});
 
 
@@ -215,7 +250,7 @@
 				id = "id"+count;
 
 			    //create an element
-			    var $element = $("<div id='id"+count+"' class=' retangulo ui-widget-content''> </div>");
+			    var $element = $("<div id='id"+count+"' class='retangulo ui-widget-content' onClick='selecionar("+id+")' > <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit </p> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -223,7 +258,18 @@
 			    //make it "draggable" and "resizable"
 			    $element.draggable();
 
-			    $element.draggable({  containment: 'parent'})
+			    $element.draggable({  containment: 'parent'});
+
+			     $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'insert', projeto:'1', idElemento: "id"+count , tipo:'3'}
+				}).done(function(e){
+						//$('div.comments').append(e); 
+						//alert(e);
+
+						});
+
 
 			    	    
 			    return false;
@@ -237,7 +283,7 @@
 		   		count =  count + 1;
 		   		id = "id"+count;
 		     //create an element
-			    var $element = $("<div id='id"+count+"' class='losango ui-widget-content'> </div>	");
+			    var $element = $("<div id='id"+count+"' class='losango ui-widget-content'  onClick='selecionar("+id+")'> </div>	");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -245,7 +291,20 @@
 			    //make it "draggable" and "resizable"
 			    $element.draggable();
 
-			    $element.draggable({  containment: 'parent'})
+			    $element.draggable({  containment: 'parent'});
+
+
+
+			     $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'insert', projeto:'1', idElemento: "id"+count , tipo:'2'}
+				}).done(function(e){
+						//$('div.comments').append(e); 
+						//alert(e);
+
+						});
+
 			    
 			    return false;
 		  
@@ -255,7 +314,7 @@
 		     	count =  count + 1;
 		     	id = "id"+count;
 		       	//create an element
-			    var $element = $("<div id='id"+count+"' class=' oval ui-widget-content'> </div>");
+			    var $element = $("<div id='id"+count+"' class=' oval ui-widget-content' onClick='selecionar("+id+")'> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -263,7 +322,21 @@
 			    //make it "draggable" and "resizable"
 			    $element.draggable();
 
-			    $element.draggable({  containment: 'parent'})
+			    $element.draggable({  containment: 'parent'});
+
+
+
+			     $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'insert', projeto:'1', idElemento: "id"+count , tipo:'1'}
+				}).done(function(e){
+						//$('div.comments').append(e); 
+						//alert(e);
+
+						});
+
+
 			    
 			    return false;
 		  
@@ -273,9 +346,10 @@
 		circulo.click(function(){
 				count =  count + 1;
 				id = "id"+count;
+	
 		   
 		      	//create an element
-			    var $element = $("<div id='id"+count+"' class='circulo ui-widget-content'> </div>");
+			    var $element = $("<div id='id"+count+"' class='circulo ui-widget-content'  onClick='selecionar("+id+")'> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -283,8 +357,22 @@
 			    //make it "draggable" and "resizable"
 			    $element.draggable();
 
-			    $element.draggable({  containment: 'parent'})
-			    
+			    $element.draggable({  containment: 'parent'});
+
+
+			    $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'insert', projeto:'1', idElemento: "id"+count , tipo:'4'}
+				}).done(function(e){
+						//$('div.comments').append(e); 
+						//alert(e);
+
+						});
+
+
+
+					    
 			    return false;
 		  
 		});
@@ -294,21 +382,48 @@
 		$("body").on(
   		  "click",
     	".ui-widget-content", // pode ser ID tbm
-    function (event) {
+   		 function (event) {
     	 id = $(this).attr('id');
-        //alert(id);
 
-    }
+    	
+    	}
 );
 
  
 });
 
+
+	//$(document).keypress(function(e){
+
+	//		alert(e.keyCode);
+			//if(e.wich ==114|| e.keyCode == 114){
+			//$('#'+id).remove();
+			//$("#menu-opcoes").css("display", "none");
+		
+ 	 //	});*/
   		
 
   </script>
 
+
+   
+		
   <script>
+
+  function selecionar(teste){
+
+  	var idElemento = teste.id;
+  		//alert(idElemento);
+  		if(idElemento != 'area'){
+        $("#menu-opcoes").css("display", "block");
+       // idElemento.css("border-style", "dashed");
+        //idElemento.css("border-width", "6px");
+    }
+        else{ $("#menu-opcoes").css("display", "none");}
+
+
+  			
+  	}
 
   	/*$(function() {
 
