@@ -2,68 +2,78 @@
 <html lang="pt-BR">
 <head>
 	<meta charset="UTF-8">
-	<meta name="description" content="Protótipo"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	
+	<meta name="description" content="Protótipo">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Protótipo</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/bootstrap-responsive.css">
+	<link rel="stylesheet" href="css/bootstrap-responsive.css">		
 	<link rel="stylesheet" href="css/estilo.css">
 	<link rel="stylesheet" href="jquery-ui.css">
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
 
 	<script type="text/javascript" src="jquery-1.10.2.js"> </script>
 	<script type="text/javascript" src="jquery-ui.js"> </script>
 
+	
 </head>
+<body data-spy="scroll" data-target=".sidebar">
 
+	<nav class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
 
-<body>
-<div class="navbar navbar-fixed-top cabecalho">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#"> Protótipo v1 </a>
-          <div class="nav-collapse collapse">
-           
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+				<button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					
+
+				</button>
+				<a href="#" class="brand">Protótipo v1</a>
+
+			</div>
+		</div>
+	</nav>
+
+	
 
 
 	<div class="container-fluid">
+
 		<div class="row-fluid">
 
 			
 
 
 			<div id="principal" class="span10">
-			<div id="area"  onClick='selecionar(area)'>
-
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab1" data-toggle="tab"> Fluxograma </a></li>
-					<li ><a href="#tab2" data-toggle="tab">  Visualizar Tela </a> </li>
+			<ul class="nav nav-tabs" data-tabs="tabs">
+					<li class="active"><a href="#area" data-toggle="tab"> Fluxograma </a></li>
+					<li ><a href="#tela" data-toggle="tab">  Visualizar Tela </a> </li>
 					
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane active "id="tab1">
+					<div class="tab-pane active "id="area">
 						
 					</div>
-					<div class="tab-pane" id="tab2">
+					<div class="tab-pane" id="tela">
+
+						<div id="visualizar" class="span3 offset4" >
+							
+							<div id="telas-geradas"> 
+
+								
+								<img src="img/logo.png">
+
+								<h3>Bem vindo!</h3> </div>
+
+
+						</div>
 						
 					</div>
-					
 				</div>
-				
-			</div>
 
-			
 			</div>
-
 
 
 			<div id="menu-lateral" class="span2 table-bordered"  data-spy="affix" data-offset-top="311">
@@ -142,47 +152,15 @@
 
 
 			</div>
-
-
-
-
-
-
-				
+	
 			</div>
-		</div>
 
-		<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 	</div>
 
 
-		
-
-	<script type="text/javascript"  src="js/bootstrap.js"> </script>
-	<script type="text/javascript">
-
-	function dragStart(event){
-		event.dataTransfer.setData("ID", ev.target.getAtrribute('id')); }
-
-	function dragOver(event) { return false;}
-
-	function dragDrop(acao) {
-	var formaSelecionada = acao.dataTransfer.getDAta("ID");
-	acao.target.appenChild(document.getElementById(formaSelecionada));}
-
-
-
-	</script>
-
 
 	
-  <script>
-  $(function() {
-     $( "#area" ).resizable();
-  });
-
-
-  </script>
+  
 
   <script>
 
@@ -446,7 +424,8 @@
   </script>
 
 
-  
-</body>
-</html>
+		 
+		 
 
+		</body>
+		</html>
