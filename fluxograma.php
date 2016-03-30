@@ -16,12 +16,17 @@ $usuario = $_GET["us"];
 	<link rel="stylesheet" href="css/estilo.css">
 	<link rel="stylesheet" href="jquery-ui.css">
 
-	<script src="https://code.jquery.com/jquery.js"></script>
-	<script type="text/javascript" src="jquery"> </script>
+
+	
+	<script type="text/javascript" src="jquery.js"></script>
+
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 
 	<script type="text/javascript" src="jquery-1.10.2.js"> </script>
 	<script type="text/javascript" src="jquery-ui.js"> </script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="bootbox.min.js"></script>
+	 <script type="text/javascript" src="jquery.line.js"></script>
 
 	
 </head>
@@ -44,7 +49,11 @@ $usuario = $_GET["us"];
 	</nav>
 
 	
-		<?php echo '<input id="projeto" value="'.$projeto.'"></input><input id="usuario" value="'.$usuario.'"></input>'; ?>
+		<?php echo '<input id="projeto" class="input-none" value="'.$projeto.'"></input>
+					<input id="usuario" class="input-none" value="'.$usuario.'"></input>
+		            <input id="idSelecionado" class="input-none">
+		        	</input><input id="input-associacao" class="input-none"></input>
+		        	<input id="decisao" class="input-none"></input>';?>
 
 	<div class="container-fluid">
 
@@ -98,12 +107,12 @@ $usuario = $_GET["us"];
 
 				
 
-					<div  class="span6 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+					<div  class="span6 menu-lateral-formas">
 						<input id="bOval" type="image" src="img/oval.png" width="35px" height="35px">
 						<span id="legenda">Quadro Clínico</span>
 					</div>
 				
-				<div class="span6 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+				<div class="span6 menu-lateral-formas">
 						<input id="bLosang" type="image" src="img/losango.png" width="40px" height="40px">
 						<span id="legenda">Decisões Clínicas</span>
 				</div>
@@ -114,12 +123,12 @@ $usuario = $_GET["us"];
 
 				
 
-					<div  class="span6 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+					<div  class="span6 menu-lateral-formas">
 						<input id="bRetang" type="image" src="img/retangulo.png" width="50px" height="50px">
 						<span id="legenda">Processo do atendimento</span>
 					</div>
 				
-				<div  class="span6 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+				<div  class="span6 menu-lateral-formas">
 					<input id="bCirc" type="image" src="img/circulo.jpg" width="50px" height="50px">
 					<span id="legenda">Conclusão</span>
 				</div>
@@ -132,7 +141,7 @@ $usuario = $_GET["us"];
 
 
 			
-			<div id="menu-opcoes" class="span2 table-bordered"  data-spy="affix" data-offset-top="311">
+			<div id="menu-opcoes" class="span2 table-bordered"  data-spy="affix" data-offset-top="511">
 
 				<div id="topo-menu-lateral">
 					Selecione
@@ -140,15 +149,15 @@ $usuario = $_GET["us"];
 
 			<div class="row-fluid">
 
-					<div  class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+					<div  class="span4 menu-lateral-formas">
 						<input id="delete" type="image" src="img/delete.png" width="25px" height="25px">
 					</div>
 
-					<div  class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+					<div  class="span4 menu-lateral-formas" >
 						<input id="edit" type="image" src="img/editar.png" width="35px" height="35px">
 					</div>
 
-					<div class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
+					<div class="span4 menu-lateral-formas" >
 							<input id="redimensiona" type="image" src="img/redimensiona.png" width="20px" height="20px">
 					</div>
 
@@ -156,8 +165,8 @@ $usuario = $_GET["us"];
 
 				<div class="row-fluid">
 
-					<div  class="span4 menu-lateral-formas" draggable=true ondragstart="return dragStart(event)">
-						<input id="delete" type="image" src="img/associacao.png" width="25px" height="25px">
+					<div  class="span4 menu-lateral-formas">
+						<input id="associacao" type="image" src="img/associacao.png" width="25px" height="25px">
 					</div>
 
 					
@@ -167,6 +176,8 @@ $usuario = $_GET["us"];
 
 
 			</div>
+
+			<div class="row-fluid">  <button id="final" class="btn btn-success btn-large"> GERAR APLICATIVO </button></div>
 	
 			</div>
 
@@ -192,16 +203,29 @@ $usuario = $_GET["us"];
 		var apagar = $('#delete');
 		var redimensiona = $('#redimensiona');
 		var editar = $('#edit');
+		var associar = $("#associacao")
 		var telas = $('#ver-telas');
 		var projeto = $('#projeto').val();
 		var usuario = $('#usuario').val();
-		var fluxograma=$('#fluxograma');		
+		var fluxograma=$('#fluxograma');	
+		var id = $('#idSelecionado').val();	
 
 
 
 		var count = 0;
-		var id = 0;
 
+
+		
+
+		
+		divPai.click(function(){
+
+			$('#area').css( 'cursor', 'default' );
+			$("#input-associacao").val(0);
+			$('#'+$('#idSelecionado').val()).css("background-color", "white");
+
+
+		});
 		
 		/*
 			Descrição funcional: ao clicar na aba fluxograma, limpa a div #telas-geradas e acrescenta novamente a imagem de abertura
@@ -251,7 +275,7 @@ $usuario = $_GET["us"];
 				        }
 
 					$.each(jq_array, function (index, value) {
-							console.log(value.conteudo);
+							console.log(value.idElemento);
 
 
 
@@ -259,13 +283,10 @@ $usuario = $_GET["us"];
        			}, 2000);
 
 					setTimeout(function() {
-
+					
 											
-					var $element = $("<div> <button class='btn btn-primary'>"+value.conteudo+" </button> </div>");
-			    
-				    //append it to the DOM
-				  
-				    $("#telas-geradas").append($element);
+					var $element = $("<div> <button class='btn btn-primary' onClick='verificaAssociacaoQuadroClinico("+value.idElemento+")'>"+value.conteudo+" </button> </div>");
+			        $("#telas-geradas").append($element);
        			}, 2001);
 
 					});
@@ -273,6 +294,97 @@ $usuario = $_GET["us"];
  					
 					});		
 			
+			});
+
+
+		associar.click(function(){
+			var elementoFrom = $('#idSelecionado').val();
+			var decisao = $('#decisao');
+
+			decisao.val('');
+			
+			console.log("############# ASSOCIAR #################");
+				
+				var strings = elementoFrom.split("id");
+				var valorInput = strings[1];
+				
+				var conteudo = $('#'+valorInput).val();
+				console.log("depois do split "+conteudo);
+				//alert("Clique no elemento que quer associar com: "+conteudo);
+
+				 $.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'getTipo', projeto:projeto, idElemento: elementoFrom , tipo:'0'}
+				}).done(function(e){
+
+					if(e==4){
+						$('#area').css( 'cursor', 'url(impossivel.cur), auto' );
+						console.log("############## Impossível realizar nova associação! (De - Conclusão)");
+					}
+					else{
+
+						if(e==2){
+
+							
+							bootbox.dialog({
+								message: "A associação que você gostaria de fazer, irá possuir o fluxo:",
+								title: "Decisão",
+								buttons: {
+									success: {
+										label: "Positivo",
+										className: "btn-success",
+										callback:  function() {
+											decisao.val('sim');
+										  	console.log("Positivo");
+											}
+										},
+									danger: {
+										label: "Negativo",
+										className: "btn-danger",
+										callback:   function() {
+											decisao.val('nao');
+										  	console.log("negativo");
+											}
+										}
+																    
+										}
+									});
+							}
+						
+						var projeto = $('#projeto').val();	// id do projeto
+						$('#area').css( 'cursor', 'url(seta.cur), auto' );
+			
+  		
+
+				  		$.ajax({
+									type:'POST',
+									url:'teste.php',
+									data:{ action: 'verificarAssociacaoDe', projeto:projeto, idElemento: elementoFrom , tipo:'0'}
+								}).done(function(e){
+								console.log("Verificar Associacoes: "+e);
+								if(e==0){
+									$('#input-associacao').val('1');		
+								}
+								else{
+									console.log("############## Impossível realizar nova associação!");
+									$('#area').css( 'cursor', 'url(impossivel.cur), auto' );
+								}
+									
+
+										});
+						}
+
+						
+				});
+
+
+
+
+				
+
+				 //		
+
 			});
 
 	
@@ -298,15 +410,18 @@ $usuario = $_GET["us"];
 		*/
 
 		apagar.click(function() {
-
-			$('#'+id).remove();
+			var deleta = $('#idSelecionado').val();
+			$("#"+deleta).remove();
+			console.log("############# APAGAR #################");
+			console.log("id:"+deleta);
+			
 			$("#menu-opcoes").css("display", "none");
 
 
 			 $.ajax({
 					type:'POST',
 					url:'teste.php',
-					data:{ action: 'delete', projeto:projeto, idElemento: id , tipo:'0'}
+					data:{ action: 'delete', projeto:projeto, idElemento: deleta , tipo:'0'}
 				}).done(function(e){
 						//$('div.comments').append(e); 
 						//alert(e);
@@ -324,14 +439,41 @@ $usuario = $_GET["us"];
 		*/
 
 
+		$.fn.clickOff = function(callback, selfDestroy) {
+    var clicked = false;
+    var parent = this;
+    var destroy = selfDestroy || true;
+    
+    parent.click(function() {
+        clicked = true;
+    });
+    
+    $(document).click(function(event) { 
+        if (!clicked) {
+            callback(parent, event);
+        }
+        if (destroy) {
+            //parent.clickOff = function() {};
+            //parent.off("click");
+            //$(document).off("click");
+            //parent.off("clickOff");
+        };
+        clicked = false;
+    });
+};
+
+
 		editar.click(function() { 
-			/*var $input = $("<div class='conteudoElemento' ><input type='text'></div>");
-			$('#'+id).append($input);
+			console.log("EDITAR!!!!!!!!!!!");
 
-			allInputs.attr("disabled", false);*/
+			var divElemento =  $('#idSelecionado').val();
+			
 
-			//var valor = $("input[name=<nome do campo aqui>]").val();
-			//var $input = $("<div id='conteudoElemento'> <form><input type='text'></form></div>");*
+			var strings = divElemento.split("id");
+			var valorInput = strings[1];
+			//console.log("Valor: "+valorInput);
+			$('#conteudo'+valorInput).remove();
+			$('#'+valorInput).css("display", "block");
 
 		});
 
@@ -358,7 +500,7 @@ $usuario = $_GET["us"];
 				id = "id"+count;
 
 			    //create an element
-			    var $element = $("<div id='id"+count+"' class='retangulo ui-widget-content' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input>  </div>");
+			    var $element = $("<div id='id"+count+"' class='retangulo elementos' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input>  </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -408,7 +550,7 @@ $usuario = $_GET["us"];
 		   		count =  count + 1;
 		   		id = "id"+count;
 		     //create an element
-			    var $element = $("<div id='id"+count+"' class='losango ui-widget-content'  onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input>   </div>	");
+			    var $element = $("<div id='id"+count+"' class='losango elementos'  onClick='selecionar("+id+")'><input id='"+count+"' class='rotacionar' onChange='inserirConteudo("+count+");' type='text'></input>   </div>	");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -457,7 +599,7 @@ $usuario = $_GET["us"];
 		     	count =  count + 1;
 		     	id = "id"+count;
 		       	//create an element
-			    var $element = $("<div id='id"+count+"' class='oval ui-widget-content elemento' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input> </div>");
+			    var $element = $("<div id='id"+count+"' class='oval elementos' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -507,7 +649,7 @@ $usuario = $_GET["us"];
 	
 		   
 		      	//create an element
-			    var $element = $("<div id='id"+count+"' class='circulo ui-widget-content'  onClick='selecionar("+id+")'> <p>Fim</p> </div>");
+			    var $element = $("<div id='id"+count+"' class='circulo elementos'  onClick='selecionar("+id+")'> <p>Fim</p> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -537,17 +679,19 @@ $usuario = $_GET["us"];
 
 /*
 		//FUNÇÃO SIMILAR AO ONCLICK, ATUALMENTE UTILIZADO COM JAVASCRITP, POREM FUNCIONA DE MODO MAIS LENTO
-
 		$("body").on(
   		  "click",
     	".ui-widget-content", // pode ser ID tbm
    		 function (event) {
     	 id = $(this).attr('id');
     	 //alert("oi"+id);
+    	 console.log("############ MUDANÇA DE ID ################");
+    	 console.log("ID: "+id);
 
     	
     	}
 );*/
+
 
  
 });
@@ -580,23 +724,59 @@ $usuario = $_GET["us"];
 	*/
 
   function selecionar(teste){
+  	console.log("clicou");
 
   	var idElemento = teste.id;				//id do elemento clicado (div)
   	var projeto = $('#projeto').val();      // id do projeto (escondido através da interface)
   	var elementoAtual = '#'+idElemento;     //concatenação do #+ id do elemento clicado
 
+  	 
+  	 //console.log("####### setando o input ###########");
+  	 //console.log("Valor setado: "+$('#idSelecionado').val());
 
-  	if(idElemento != 'area'){				// verifica se o id do elemento clicado é diferente de area, para mostrar ou esconder os menus laterais (2).
-        $("#menu-opcoes").css("display", "block");
-       // idElemento.css("border-style", "dashed");
-        //idElemento.css("border-width", "6px");
-    }
-        else{ $("#menu-opcoes").css("display", "none");}
+  	 if($("#input-associacao").val() ==1){
+
+  	 	$("#input-associacao").val('0');
+  	 	var de= $('#idSelecionado').val();
+  	 	var decisao = $('#decisao').val();
+  	 	console.log("O Q ESTÀ NA DECISão???? "+$('#decisao').val());
+  	 	$('#'+de).css("background-color", "white");  //desmarca a div marcada anteriormente (3)
+        $('#'+idElemento).css("background-color", "yellow");  // marcação em amarelo da div que foi clicada (3).
+
+  	 	 $.ajax({
+									type:'POST',
+									url:'teste.php',
+									data:{ action: 'verificarAssociacaoPara', projeto:projeto, idElemento: idElemento , tipo:'0'}
+								}).done(function(e){
+								console.log("Verificar Associacoes: "+e);
+								if(e==0){
+									$('#area').css( 'cursor', 'seta.cur' );
+									realizarAssociacao(projeto,de,idElemento,decisao);
+
+									
+								}
+								else{
+									$('#area').css( 'cursor', 'default' );
+									console.log("############## Impossível realizar nova associação! (PARA)");}
+									
+
+										});
 
 
-  	$(elementoAtual).css("background-color", "yellow");  // marcação em amarelo da div que foi clicada (3).
- 
-  	$.ajax({
+
+		  
+  	 }
+  	 	else{
+
+			  	if(idElemento != 'area'){				// verifica se o id do elemento clicado é diferente de area, para mostrar ou esconder os menus laterais (2).
+			        $("#menu-opcoes").css("display", "block");
+			       // idElemento.css("border-style", "dashed");
+			        //idElemento.css("border-width", "6px");
+			    }
+			        else{ $("#menu-opcoes").css("display", "none");}
+
+
+  				$.ajax({
 					type:'POST',
 					url:'teste.php',
 					data:{ action: 'ultimaSelecao', projeto:projeto, idElemento: idElemento , tipo:""}
@@ -604,16 +784,39 @@ $usuario = $_GET["us"];
 					var elementoAnterior = e;
 					
 				
-					if(e==0){console.log("Zero:"+e);}
-					else{
-						if(e==1){console.log("SÃO IGUAIS "+e);}
-						else{
-						$(elementoAnterior).css("background-color", "white");  //desmarca a div marcada anteriormente (3)
- 
-						console.log(e+" Ultimo Selecionado:");}
-					}				
+				if(e==0){console.log("Zero:"+e);}
+				else{
+					if(e==1){}
+					else{ $(elementoAnterior).css("background-color", "white");}  //desmarca a div marcada anteriormente (3)
 
-			}); 			
+ 
+				$(elementoAtual).css("background-color", "yellow");  // marcação em amarelo da div que foi clicada (3).
+
+						var strings = elementoAnterior.split("#id");
+						var valorInput = strings[1];
+						var idInput = $('#'+valorInput);
+						idInput.css("display", "none");
+
+
+						//var stringAtual = elementoAtual.split(#id);
+
+						//verificarTipoElemento(projeto,stringAtual);
+						//var conteudo = $('#'+valorInput).val();
+						//inserirConteudo(valorInput);
+
+						/*$element = $("<p>"+idInput.val()+" </p>	");
+						$(elementoAnterior).append($element);
+						console.log("depois do split "+valorInput);*/
+						//alert("Clique no elemento que quer associar com: "+conteudo);
+
+					}	
+
+
+			}); }
+
+				$("#idSelecionado").val(idElemento);  // coloca no input escondido o id do elemento selecionado
+
+
 
   	}
 
@@ -626,11 +829,99 @@ $usuario = $_GET["us"];
 			Descrição técnica: Parâmetros: id do input.
 
 	*/
+
+
+	function realizarAssociacao(projeto,de, para, decisao){
+
+		if(decisao=='sim'||decisao=='nao'){
+			console.log("sim ou nao");
+			if(decisao=='sim'){
+				$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'associar-decisaoSim', projeto:projeto, idElemento: de , tipo:para}
+				}).done(function(e){});
+			}
+			
+			if(decisao=='nao'){
+
+				$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'associar-decisaoNao', projeto:projeto, idElemento: de , tipo:para}
+				}).done(function(e){});
+
+
+			}
+			
+			
+
+		}
+			else{
+
+			$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'associar', projeto:projeto, idElemento: de , tipo:para}
+				}).done(function(e){
+						console.log("Associacao:"+e);
+						var idLinha=  e.replace("\n", ""); 
+						inserirLinha(de, para, idLinha);
+				});
+				}
+
+	}
+
+	function inserirLinha(de, para, identificadorLinha){
+
+		var p = $( "#"+de);
+		var position = p.position();
+		var alturaDiv = p.height();
+		var larguraDiv = p.width();
+		console.log("Posição Esquerda:"+position.left+" Posição Topo:"+position.top+" Altura: "+alturaDiv + " Largura: "+larguraDiv);
+		var metadeAlturaA =  Math.ceil(position.top) + Math.ceil(alturaDiv/2); 
+		var metadeLarguraA = Math.ceil(position.left) + Math.ceil(larguraDiv/2);
+
+		var p2 = $( "#"+para);
+		var position2 = p2.position();
+		var alturaDiv2 = p2.height();
+		var larguraDiv2 = p2.width();
+		var metadeAlturaB =  Math.ceil(position2.top) + Math.ceil(alturaDiv2/2); 
+		var metadeLarguraB = Math.ceil(position2.left) + Math.ceil(larguraDiv2/2);
+
+		$('#area').line(metadeLarguraA, metadeAlturaA, metadeLarguraB, metadeAlturaB, {color:"red"}, identificadorLinha);
+
+	}
+
+	function verificarAssociacaoDe(idElemento){
+			var projeto = $('#projeto').val();	// id do projeto
+			var verificado = null;
+  		
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificarAssociacaoDe', projeto:projeto, idElemento: idElemento , tipo:'0'}
+				}).done(function(e){
+				console.log("Verificar Associacoes: "+e);
+					
+
+						});
+				
+			
+
+
+
+	}
+
+
   
 
   	function inserirConteudo(idendifica){
+  		console.log("inseriu conteudo");
   		var entrada =$('#'+idendifica);		//concatenação de #+id do input
   		var projeto = $('#projeto').val();	// valor do projeto
+  		
 
   		$.ajax({
 					type:'POST',
@@ -643,15 +934,216 @@ $usuario = $_GET["us"];
 
 			entrada.css("display", "none");
 
-			var $element = $("<p>"+entrada.val()+" </p>	");
-			    
-			    //append it to the DOM
-			   $("#id"+idendifica).append($element);
+			console.log("Projeto:"+projeto+" idElemento: id"+idendifica);
+			verificarTipoElemento(projeto,idendifica);
+  	}
 
-			
+  	function verificarTipoElemento(projeto, idendifica){
+  		console.log("verificou");
+  		var entrada =$('#'+idendifica);		//concatenação de #+id do input
+
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verTipo', projeto:projeto, idElemento: "id"+idendifica , tipo:''}
+				}).done(function(e){
+						console.log("Tipo:"+e);
+						var $element='';
+
+						if(e==2){
+							$element = $("<p  id='conteudo"+idendifica+"' class='rotacionar'>"+entrada.val()+" </p>	");}
+						else{
+							$element = $("<p id='conteudo"+idendifica+"'>"+entrada.val()+" </p>	");
+						}
+
+
+			    		//append it to the DOM
+			 			  $("#id"+idendifica).append($element);
+
+
+
+
+				});
+
 
 
   	}
+
+
+  	function verificaAssociacaoQuadroClinico(idGeralElemento){
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaAssociacaoQuadroClinico', projeto:'', idElemento: idGeralElemento, tipo:''}
+				}).done(function(e){
+
+				var tipoEconteudo = e.split("-");
+				var id = tipoEconteudo[0];
+				var tipo = tipoEconteudo[1];
+				var conteudo = tipoEconteudo[2];
+
+				if(conteudo==0){console.log("évazio");}
+							else{
+
+				if(tipo==2){montarTelaDecisao(id,conteudo);}				
+				if(tipo==3){montarTelaProcessoDeAtendimento(id, conteudo);}
+				if(tipo==4){montarTelaProcessoDeAtendimento();}
+
+				}
+
+								//console.log("Verifica associações dos Quadros Clínicos:"+e);*/
+			
+				});
+
+
+
+  	}
+
+  	function montarTelaQuadrosClinicos(idQuadroClinico, conteudo){}
+  	function montarTelaProcessoDeAtendimento(idProcessoAtendimento, conteudo){
+
+  		
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaTipoAssociadooProcessoDeAtendimento', projeto:'', idElemento: idProcessoAtendimento , tipo:''}
+				}).done(function(e){
+
+					$("#telas-geradas").html( '' );
+					var $element = $("<p>"+conteudo+"</p>");
+					$("#telas-geradas").append($element);
+
+					var $botao;
+
+
+					if(e==2||e==3){					
+					$botao = $( "<button class='btn btn-primary' onClick='verificaAssociacaoPAtendimento("+idProcessoAtendimento+")'> Próximo </button> ");}	
+
+				else {$botao = $( "<button class='btn btn-primary' onClick=''> Voltar ao menu </button>");}
+					
+					$("#telas-geradas").append($botao);
+
+		
+			
+				});
+
+
+
+
+
+  	}
+
+  	function verificaAssociacaoPAtendimento(idGeralElemento){
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaAssociacaoPAtendimento', projeto:'', idElemento: idGeralElemento , tipo:''}
+				}).done(function(e){
+
+					var tipoEconteudo = e.split("-");
+					var id = tipoEconteudo[0];
+					var tipo = tipoEconteudo[1];
+					var conteudo = tipoEconteudo[2];
+
+					if(tipo==2){montarTelaDecisao(id,conteudo);}
+					if(tipo==3||tipo==4){montarTelaProcessoDeAtendimento(id, conteudo);}
+
+		
+			
+				});
+
+
+
+  		
+  	}
+
+  	function montarTelaConclusao(){}
+  	function montarTelaDecisao(idDecisao, conteudo){
+   		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaAssociacaoDecisao', projeto:'', idElemento: idDecisao , tipo:''}
+				}).done(function(e){
+
+					console.log("@@@@@@@@@@@");
+					console.log(e);
+
+					var integro = e.split("-");
+					var idSim = integro[0];
+					var idNao = integro[1];
+					var tipoSim = integro[2];
+					var tipoNao = integro[3];
+					var conteudoSim = '"'+integro[4]+'"';
+					var conteudoNao = '"'+integro[5]+'"';
+					var proximoSim;
+					var proximoNao;
+
+					console.log("Tipo Sim:"+tipoSim);
+
+					if(tipoSim==2){proximoSim="montarTelaDecisao";}
+				    if(tipoSim==3){proximoSim= "montarTelaProcessoDeAtendimento";}
+				    if(tipoSim==4){proximoSim="montarTelaConclusao";}
+
+					if(tipoNao==2){proximoNao="montarTelaDecisao";}
+				    if(tipoNao==3){proximoNao="montarTelaProcessoDeAtendimento";}
+				    if(tipoNao==4){proximoNao="montarTelaConclusao";}
+
+
+  			$("#telas-geradas").html( '' );
+			var $element = $("<p>"+conteudo+"</p>");
+			$("#telas-geradas").append($element);
+
+			var $simEnao =  $("<div class='row-fluid'><div  class='span6'><button class='btn btn-success' onClick='"+proximoSim+"("+idSim+","+conteudoSim+")'>Sim</button></div><div  class='span6'><button class='btn btn-danger' onClick='"+proximoNao+"("+idNao+","+conteudoNao+")'>Não</button></div></div>");
+			$("#telas-geradas").append($simEnao);
+
+		});
+
+
+  	}
+
+
+
+  	function verificaAssociacaoDecisao(idGeralElemento){
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaAssociacaoQuadroClinico', projeto:'', idElemento: idGeralElemento , tipo:''}
+				}).done(function(e){
+						
+
+
+		
+			
+				});
+
+
+
+  	}
+
+
+  	function verificaAssociacaoProcessoAtendimento(idGeralElemento){
+
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificaAssociacaoQuadroClinico', projeto:'', idElemento: idGeralElemento , tipo:''}
+				}).done(function(e){
+						
+
+
+		
+			
+				});
+
+
+
+  	}
+
+  	//$("#element").resizable('disable'); para desabilirar o resizable
 
   	
 

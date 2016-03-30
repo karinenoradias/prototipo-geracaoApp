@@ -39,7 +39,7 @@
 	<div class="container-fluid">
 
 		<?php
-    echo "<input type='text' value='".$_SESSION['id']."' id='usuario'></input>";
+    echo "<input type='text' value='".$_SESSION['id']."' id='usuario' class='input-none'></input>";
          ?>
 
 		

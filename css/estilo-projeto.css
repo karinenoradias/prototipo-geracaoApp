@@ -1,3 +1,5 @@
 #menu-esquerdo, #painel{
 	margin-top:50px;
 	height: 200px; }
+
+	.input-none{display: none;}
