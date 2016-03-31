@@ -214,17 +214,16 @@ $usuario = $_GET["us"];
 
 		var count = 0;
 
+		$('.elementos').mousedown(function() {
+        console.log("mouse down");
+    	})
 
-		
 
-		
 		divPai.click(function(){
 
 			$('#area').css( 'cursor', 'default' );
 			$("#input-associacao").val(0);
 			$('#'+$('#idSelecionado').val()).css("background-color", "white");
-
-
 		});
 		
 		/*
@@ -411,25 +410,77 @@ $usuario = $_GET["us"];
 
 		apagar.click(function() {
 			var deleta = $('#idSelecionado').val();
-			$("#"+deleta).remove();
-			console.log("############# APAGAR #################");
-			console.log("id:"+deleta);
-			
-			$("#menu-opcoes").css("display", "none");
-
-
-			 $.ajax({
+			$.ajax({
 					type:'POST',
 					url:'teste.php',
 					data:{ action: 'delete', projeto:projeto, idElemento: deleta , tipo:'0'}
 				}).done(function(e){
-						//$('div.comments').append(e); 
-						//alert(e);
+
+						$("#"+deleta).remove();
+						console.log("############# APAGAR #################");
+						console.log("id:"+deleta);
+			
+						$("#menu-opcoes").css("display", "none");
+
+
+						console.log("Dados de associação: " +e);
+
+						
+
+
+						if(e!=0){
+
+							var linha = "linha"+(e.replace("\n", "")) ;
+							console.log("Linha:" +linha);
+
+							var d = document.getElementById('area');
+			 			var olddiv = document.getElementById(linha);
+						d.removeChild(olddiv);
+
+							 
+				      		/*jq_json_obj = $.parseJSON(e); //Convert the JSON object to jQuery-compatible
+							if(typeof jq_json_obj == 'object'){ //Test if variable is a [JSON] object
+				       		 jq_obj = eval (jq_json_obj); 
+
+				        //Convert back to an array
+				        	jq_array = [];
+				        		for(elem in jq_obj){
+				            	jq_array.push(jq_obj[elem]);
+				        		}
+				       
+				       	$.each(jq_array, function (index, value) {
+				       		var idLinha = "linha"+value.id;
+						
+						//var d = document.getElementById('area');
+			  			//var olddiv = $('#'+idLinha);
+			  			//d.removeChild(olddiv);
+			  			$('#area').remove($('#'+idLinha));
+
+			  				apagarLinha(idLinha);
+
+					});
+
+					 }*/
+
+
+
+
+						
+						
+
+
+						 }
+
+
+
 
 						});
 
 
 		});
+
+
+
 
 		/* 
 			Descrição funcional: ao clicar no botão edição, na caixa de menu "selecione", o elemento que está selecionado permitirá que mude o seu conteúdo.
@@ -500,7 +551,7 @@ $usuario = $_GET["us"];
 				id = "id"+count;
 
 			    //create an element
-			    var $element = $("<div id='id"+count+"' class='retangulo elementos' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input>  </div>");
+			    var $element = $("<div id='id"+count+"' class='retangulo elementos' onmousedown='reconhecerMovimento("+count+")' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input>  </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -550,7 +601,7 @@ $usuario = $_GET["us"];
 		   		count =  count + 1;
 		   		id = "id"+count;
 		     //create an element
-			    var $element = $("<div id='id"+count+"' class='losango elementos'  onClick='selecionar("+id+")'><input id='"+count+"' class='rotacionar' onChange='inserirConteudo("+count+");' type='text'></input>   </div>	");
+			    var $element = $("<div id='id"+count+"' class='losango elementos'  onmousedown='reconhecerMovimento("+count+")' onClick='selecionar("+id+")'><input id='"+count+"' class='rotacionar' onChange='inserirConteudo("+count+");' type='text'></input>   </div>	");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -599,7 +650,7 @@ $usuario = $_GET["us"];
 		     	count =  count + 1;
 		     	id = "id"+count;
 		       	//create an element
-			    var $element = $("<div id='id"+count+"' class='oval elementos' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input> </div>");
+			    var $element = $("<div id='id"+count+"' class='oval elementos'  onmousedown='reconhecerMovimento("+count+")' onClick='selecionar("+id+")'><input id='"+count+"' onChange='inserirConteudo("+count+");' type='text'></input> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -649,7 +700,7 @@ $usuario = $_GET["us"];
 	
 		   
 		      	//create an element
-			    var $element = $("<div id='id"+count+"' class='circulo elementos'  onClick='selecionar("+id+")'> <p>Fim</p> </div>");
+			    var $element = $("<div id='id"+count+"' class='circulo elementos'  onmousedown='reconhecerMovimento("+count+")' onClick='selecionar("+id+")'> <p>Fim</p> </div>");
 			    
 			    //append it to the DOM
 			    $("#area").append($element);
@@ -729,6 +780,8 @@ $usuario = $_GET["us"];
   	var idElemento = teste.id;				//id do elemento clicado (div)
   	var projeto = $('#projeto').val();      // id do projeto (escondido através da interface)
   	var elementoAtual = '#'+idElemento;     //concatenação do #+ id do elemento clicado
+
+  	habilitarDraggable(elementoAtual, '');
 
   	 
   	 //console.log("####### setando o input ###########");
@@ -878,7 +931,7 @@ $usuario = $_GET["us"];
 		var position = p.position();
 		var alturaDiv = p.height();
 		var larguraDiv = p.width();
-		console.log("Posição Esquerda:"+position.left+" Posição Topo:"+position.top+" Altura: "+alturaDiv + " Largura: "+larguraDiv);
+		
 		var metadeAlturaA =  Math.ceil(position.top) + Math.ceil(alturaDiv/2); 
 		var metadeLarguraA = Math.ceil(position.left) + Math.ceil(larguraDiv/2);
 
@@ -889,7 +942,9 @@ $usuario = $_GET["us"];
 		var metadeAlturaB =  Math.ceil(position2.top) + Math.ceil(alturaDiv2/2); 
 		var metadeLarguraB = Math.ceil(position2.left) + Math.ceil(larguraDiv2/2);
 
-		$('#area').line(metadeLarguraA, metadeAlturaA, metadeLarguraB, metadeAlturaB, {color:"red"}, identificadorLinha);
+		$('#area').line(metadeLarguraA, metadeAlturaA, metadeLarguraB, metadeAlturaB, {color:"red", stroke:5}, identificadorLinha);
+		p.draggable( 'disable' );
+		p2.draggable('disable');
 
 	}
 
@@ -907,10 +962,13 @@ $usuario = $_GET["us"];
 					
 
 						});
-				
-			
+	}
+
+	function habilitarDraggable(idElemento, posicaoAtual){
+			console.log(idElemento);
 
 
+			$(idElemento).draggable('enable');
 
 	}
 
@@ -1125,6 +1183,46 @@ $usuario = $_GET["us"];
   	}
 
 
+  	function reconhecerMovimento(idElemento){
+  		var elemento = "id"+idElemento;
+  		var projeto = $('#projeto').val();
+  		console.log("eu me remexo muito: "+elemento); 
+  		$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'verificarAssociacoesElemento', projeto:projeto, idElemento: elemento , tipo:''}
+				}).done(function(e){
+
+					console.log("Associações: "+e);
+
+					  jq_json_obj = $.parseJSON(e); //Convert the JSON object to jQuery-compatible
+
+				      if(typeof jq_json_obj == 'object'){ //Test if variable is a [JSON] object
+				        jq_obj = eval (jq_json_obj); 
+
+				        //Convert back to an array
+				        jq_array = [];
+				        for(elem in jq_obj){
+				            jq_array.push(jq_obj[elem]);
+				        }
+				       
+
+					$.each(jq_array, function (index, value) {
+							console.log(value.id);
+
+					});
+
+					 }
+						
+
+
+		
+			
+				});
+
+  	}
+
+
   	function verificaAssociacaoProcessoAtendimento(idGeralElemento){
 
   		$.ajax({
@@ -1142,6 +1240,38 @@ $usuario = $_GET["us"];
 
 
   	}
+
+
+  	function apagarLinha(idLinha){
+			//idLinha = "linha"+idLinha;
+			//console.log("Apagar Linha: "+idLinha);
+			//id linha sem #
+
+
+			deleta = idLinha.split("linha");
+  			console.log("Apagar linha id: "+ deleta[1]);
+
+			$.ajax({
+					type:'POST',
+					url:'teste.php',
+					data:{ action: 'deleteAssociacao', projeto:'', idElemento: deleta[1] , tipo:'0'}
+				}).done(function(e){
+						/*try{
+						var d = document.getElementById('area');
+			  			var olddiv = document.getElementById(idLinha);
+			  			d.removeChild(olddiv);
+			  			}catch(err){console.log("ERRO:"+err);}*/
+
+
+
+				});
+
+		
+  			
+
+
+  			
+		}
 
   	//$("#element").resizable('disable'); para desabilirar o resizable
 

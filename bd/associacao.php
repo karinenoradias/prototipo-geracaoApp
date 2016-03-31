@@ -31,6 +31,46 @@ class Associacao extends PersistModelAbstract
         return true;      
     }
 
+    public function getAssociacao($elemento, $projeto){
+
+        $busca  = "SELECT id FROM associacao WHERE de = (SELECT id FROM elemento WHERE idElemento ='$elemento' AND projeto = '$projeto') OR para = (SELECT id FROM elemento WHERE idElemento ='$elemento' AND projeto = '$projeto')";
+        $result = $this->getConn()->query($busca);
+        $cont =0;
+        $id='';
+         while ($row = $result->fetch_object()) {
+            $cont=$cont+1;                    
+            $id = $row->id;
+        }
+
+        if($cont==0){return 0;}
+        else{ return $id;}
+    
+    }
+
+    public function getAssociacaoDe_Para($de, $para){
+
+        $busca  = "SELECT id FROM associacao WHERE de = '$de' AND para = '$para'";
+        $result = $this->getConn()->query($busca);
+        $cont =0;
+        $id='';
+         while ($row = $result->fetch_object()) {
+            $cont=$cont+1;                    
+            $id = $row->id;
+        }
+
+        if($cont==0){return 0;}
+        else{ return $id;}
+
+
+    }
+
+
+    public function deleteAssociacao ($idAssociacao)
+    {
+        $sql  = "DELETE FROM associacao WHERE id ='$idAssociacao'";
+        $this->getConn()->query($sql);           
+    }
+
     	public function setAlterAssociacao($de, $para)
     {
         $sql = "INSERT INTO Associacao (de, para) VALUES ( '$de', '$para')";

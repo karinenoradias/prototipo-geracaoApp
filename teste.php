@@ -23,7 +23,14 @@ $associacao = new Associacao();
         case 'insert' : $elemento -> setElemento($projeto, $idElemento, $tipo); break;
         case 'getIdElemento': $elemento-> getIdElemento($idElemento, $projeto); break;
         case 'getTipo':  $tipo =  $elemento -> getTipo($idElemento, $projeto); echo $tipo; break;
-        case 'delete': $elemento-> deleteElemento ($idElemento, $projeto); break;
+        case 'delete': 
+        $assoc = $associacao -> getAssociacao($idElemento,$projeto);
+        $elemento-> deleteElemento ($idElemento, $projeto);
+        $associacao ->deleteAssociacao($assoc);
+        echo $assoc;
+         break;
+      
+        
         case'cont': $quant= $elemento ->  quadrosClinicos($projeto);
         			echo json_encode( $quant );
         break;
@@ -66,7 +73,8 @@ $associacao = new Associacao();
              $idGeralElementoDe = $elemento ->  getIdElemento($idElemento, $projeto); 
              $idGeralElementoPara = $elemento ->  getIdElemento($tipo, $projeto); 
              $associacao -> setAssociacao($idGeralElementoDe, $idGeralElementoPara);
-             echo $idGeralElementoDe;
+             $idAssociacao = $associacao -> getAssociacaoDe_Para($idGeralElementoDe, $idGeralElementoPara);
+             echo $idAssociacao;
         break;
 
          case 'associar-decisaoSim':
@@ -164,6 +172,11 @@ $associacao = new Associacao();
 
               echo $sim."-".$nao."-".$tipoS."-".$tipoN."-".$conteudoSim."-".$conteudoNao;
             break;
+
+            case 'verificarAssociacoesElemento':
+               $assoc = $associacao -> getAssociacao($idElemento,$projeto);
+               echo json_encode($assoc);
+              break;
 
     }
 

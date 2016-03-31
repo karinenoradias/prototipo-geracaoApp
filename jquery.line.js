@@ -25,6 +25,7 @@
                   }
                   var line = document.createElement("div");
                   line.id = 'linha'+identificador;
+                  line.setAttribute('onclick', 'alert(\'hello\');');
                   
                   // Formula for the distance between two points
                   // http://www.mathopenref.com/coorddist.html
